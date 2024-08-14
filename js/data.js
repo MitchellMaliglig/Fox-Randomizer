@@ -1,5 +1,5 @@
 'use strict';
-let messages = [
+const messages = [
   'Cute!',
   'Adorable!',
   'Lovely!',
@@ -30,7 +30,7 @@ async function fetchFox() {
     19:10  error  'getMessage' is defined but never used  @typescript-eslint/no-unused-vars
     23:16  error  'fetchFox' is defined but never used    @typescript-eslint/no-unused-vars
 */
-let dataFalse = false;
+const dataFalse = false;
 if (dataFalse) {
   console.log("We shouldn't be here...");
   getMessage();

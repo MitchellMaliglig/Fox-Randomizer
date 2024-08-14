@@ -27,7 +27,6 @@ a {
 a.generate,
 a.save {
   margin-bottom: 1.5rem;
-  border-radius: 0.5rem;
   font-size: 1.5rem;
   width: 75%;
   display: block;
@@ -35,4 +34,25 @@ a.save {
 
 a:hover {
   cursor: pointer;
+}
+
+a.save-nope {
+  background: gray;
+}
+
+a.save-yes {
+  background: green;
+}
+
+a.save-nope,
+a.save-yes {
+  display: block;
+  text-align: center;
+}
+
+a.generate,
+a.save,
+a.save-nope,
+a.save-yes {
+  border-radius: 0.5rem;
 }

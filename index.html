@@ -21,34 +21,62 @@
       </div>
     </header>
     <main class="container">
-      <div class="row">
-        <div class="column-half">
-          <img src="images/Cattius.png" />
-        </div>
-        <div class="column-half">
-          <p class="message">
-            Hi, welcome! My name is Cattius! Please click
-            <q>Generate</q> to get started.
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="column-half">
-          <img src="images/placeholder.jpg" class="random" />
-        </div>
-        <div class="column-half">
-          <div class="row">
-            <div class="column-full">
-              <a class="generate">Generate</a>
-            </div>
+      <div data-view="generate-fox">
+        <div class="row">
+          <div class="column-half">
+            <img src="images/Cattius.png" />
           </div>
-          <div class="row">
-            <div class="column-full">
-              <a class="save">Save</a>
-            </div>
+          <div class="column-half">
+            <p class="message">
+              Hi, welcome! My name is Cattius! Please click
+              <q>Generate</q> to get started.
+            </p>
           </div>
         </div>
+        <div class="row">
+          <div class="column-half">
+            <img src="images/placeholder.jpg" class="random" />
+          </div>
+          <div class="column-half">
+            <div class="row">
+              <div class="column-full">
+                <a class="generate">Generate</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="column-full">
+                <a class="save">Save</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <dialog class="save-dialog">
+          <form class="save-form">
+            <h2 class="save-header">Save fox?</h2>
+            <div class="row">
+              <div class="column-full">
+                <label for="save-title">Title</label>
+                <textarea id="save-title" name="title" required></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="column-full">
+                <label for="save-notes">Notes</label>
+                <textarea id="save-notes" name="notes" required></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="column-half">
+                <a class="save-nope">Nope</a>
+              </div>
+              <div class="column-half">
+                <a class="save-yes">Yes</a>
+              </div>
+            </div>
+          </form>
+        </dialog>
       </div>
+      <div data-view="view-fox"></div>
     </main>
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
