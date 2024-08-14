@@ -1,0 +1,59 @@
+.hidden {
+  display: none !important;
+}
+
+.container {
+  max-width: 575px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column-full,
+.column-half {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+/* min-width: 768px */
+@media screen and (width >=768px) {
+  .container {
+    max-width: 900px;
+  }
+
+  .column-full,
+  .column-half {
+    padding: 0 0.75rem;
+  }
+
+  .column-half {
+    width: 50%;
+  }
+}
+
+/* yes */
+header {
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  display: inline;
+  margin-right: 1rem;
+}
+
+h2.save-header {
+  text-align: center;
+}
+
+img {
+  width: 75%;
+}
+
+textarea {
+  width: 100%;
+}
