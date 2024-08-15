@@ -57,3 +57,17 @@ img {
 textarea {
   width: 100%;
 }
+
+a.save-nope,
+a.save-yes {
+  display: block;
+  text-align: center;
+}
+
+a.new {
+  float: right;
+}
+
+h2.entries {
+  display: inline;
+}

@@ -1,4 +1,6 @@
 'use strict';
+const foxKey = 'fox-key';
+const data = readData();
 const messages = [
   'Cute!',
   'Adorable!',
@@ -10,9 +12,27 @@ const messages = [
   "We've got a good one right here!",
   'This one makes me happy...',
 ];
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function writeData() {
+  const json = JSON.stringify(data);
+  localStorage.setItem(foxKey, json);
+}
+function readData() {
+  const json = localStorage.getItem(foxKey);
+  if (json !== null) {
+    return JSON.parse(json);
+  } else {
+    return {
+      foxes: [],
+      nextId: 1,
+    };
+  }
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getMessage() {
   return `"${messages[Math.floor(Math.random() * messages.length)]}"`;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function fetchFox() {
   try {
     const response = await fetch('https://randomfox.ca/floof/');
@@ -25,14 +45,4 @@ async function fetchFox() {
     console.error('Error:', error);
   }
   return null;
-}
-/*
-    19:10  error  'getMessage' is defined but never used  @typescript-eslint/no-unused-vars
-    23:16  error  'fetchFox' is defined but never used    @typescript-eslint/no-unused-vars
-*/
-const dataFalse = false;
-if (dataFalse) {
-  console.log("We shouldn't be here...");
-  getMessage();
-  fetchFox();
 }
