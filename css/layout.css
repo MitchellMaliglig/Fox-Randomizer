@@ -70,7 +70,8 @@ a.save-yes {
   text-align: center;
 }
 
-a.new {
+a.new,
+i {
   float: right;
 }
 

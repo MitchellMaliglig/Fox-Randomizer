@@ -27,7 +27,7 @@
       </div>
     </header>
     <main class="container">
-      <div data-view="generate-fox" class="hidden">
+      <div data-view="generate-fox" class="show">
         <div class="row">
           <div class="column-half">
             <img src="images/Cattius.png" />
@@ -69,6 +69,12 @@
               <div class="column-full">
                 <label for="save-notes">Notes</label>
                 <textarea id="save-notes" name="notes" required></textarea>
+                <p class="hidden" id="save-required-image">
+                  You ain't saving nothing, lad!
+                </p>
+                <p class="hidden" id="save-required-text">
+                  *Title &amp; notes required
+                </p>
               </div>
             </div>
             <div class="row">
@@ -82,7 +88,7 @@
           </form>
         </dialog>
       </div>
-      <div data-view="view-fox" class="show">
+      <div data-view="view-fox" class="hidden">
         <div class="row">
           <div class="column-half">
             <h2 class="entries">Foxes</h2>

@@ -15,6 +15,10 @@ a {
   color: white;
 }
 
+p[id*='required'] {
+  color: red;
+}
+
 h1,
 h2,
 a,
@@ -26,8 +30,12 @@ p.message {
   font-size: 1.25rem;
 }
 
+h2,
 a {
   font-size: 1.5rem;
+}
+
+a {
   padding: 1rem;
   background: rgb(0, 162, 232);
 }
@@ -39,13 +47,19 @@ a.save {
   display: block;
 }
 
-a:hover {
+a:hover,
+i:hover {
   cursor: pointer;
 }
 
 a.generate,
 a.save,
 a.save-nope,
-a.save-yes {
+a.save-yes,
+a.new {
   border-radius: 0.5rem;
+}
+
+ul {
+  list-style: none;
 }

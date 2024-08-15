@@ -5,6 +5,8 @@ interface FormElements extends HTMLFormControlsCollection {
   // notes: ['save-notes'];
 }
 
+const defaultImage = 'images/placeholder.jpg';
+
 const $randomImage = document.querySelector('img.random') as HTMLImageElement;
 if (!$randomImage) throw new Error('$randomImage missing');
 
@@ -57,6 +59,16 @@ const $noFoxesImage = document.querySelector(
 ) as HTMLImageElement;
 if (!$noFoxesImage) throw new Error('$noFoxesImages missing');
 
+const $saveRequiredText = document.querySelector(
+  'p#save-required-text',
+) as HTMLParagraphElement;
+if (!$saveRequiredText) throw new Error('$saveRequiredText missing');
+
+const $saveRequiredImage = document.querySelector(
+  'p#save-required-image',
+) as HTMLParagraphElement;
+if (!$saveRequiredImage) throw new Error('$saveRequiredImage missing');
+
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -79,7 +91,7 @@ function swapViews(view: string): void {
 }
 
 function resetDefaultImage(): void {
-  $randomImage.src = 'images/placeholder.jpg';
+  $randomImage.src = defaultImage;
 }
 
 function renderFox(fox: FoxData): HTMLLIElement {
@@ -137,6 +149,8 @@ $saveAnchor.addEventListener('click', function () {
 });
 
 $saveNopeAnchor.addEventListener('click', function () {
+  $saveRequiredText.className = 'hidden';
+  $saveRequiredImage.className = 'hidden';
   $saveForm.reset();
   $saveDialog.close();
 });
@@ -144,24 +158,33 @@ $saveNopeAnchor.addEventListener('click', function () {
 $saveYesAnchor.addEventListener('click', function () {
   const $formElements = $saveForm.elements as FormElements;
 
-  const foxData: FoxData = {
-    title: $formElements.title.value,
-    notes: $formElements.notes.value,
-    photo: $randomImage.src,
-    id: data.nextId,
-  };
+  if ($randomImage.src.includes(defaultImage)) {
+    $saveRequiredImage.className = 'show';
+  } else if (!$formElements.title.value || !$formElements.notes.value) {
+    $saveRequiredText.className = 'show';
+  } else {
+    const foxData: FoxData = {
+      title: $formElements.title.value,
+      notes: $formElements.notes.value,
+      photo: $randomImage.src,
+      id: data.nextId,
+    };
 
-  data.nextId++;
-  data.foxes.unshift(foxData);
+    data.nextId++;
+    data.foxes.unshift(foxData);
 
-  toggleNoFoxes();
-  resetDefaultImage();
-  $ul.prepend(renderFox(foxData));
+    toggleNoFoxes();
+    resetDefaultImage();
+    $message.textContent = getSaved();
+    $saveRequiredText.className = 'hidden';
+    $saveRequiredImage.className = 'hidden';
 
-  writeData();
+    $ul.prepend(renderFox(foxData));
+    writeData();
 
-  $saveForm.reset();
-  $saveDialog.close();
+    $saveForm.reset();
+    $saveDialog.close();
+  }
 });
 
 $foxesAnchor.addEventListener('click', function () {

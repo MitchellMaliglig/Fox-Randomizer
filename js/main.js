@@ -1,4 +1,5 @@
 'use strict';
+const defaultImage = 'images/placeholder.jpg';
 const $randomImage = document.querySelector('img.random');
 if (!$randomImage) throw new Error('$randomImage missing');
 const $generateAnchor = document.querySelector('a.generate');
@@ -27,6 +28,10 @@ const $ul = document.querySelector('ul');
 if (!$ul) throw new Error('$ul missing');
 const $noFoxesImage = document.querySelector('img.no-foxes');
 if (!$noFoxesImage) throw new Error('$noFoxesImages missing');
+const $saveRequiredText = document.querySelector('p#save-required-text');
+if (!$saveRequiredText) throw new Error('$saveRequiredText missing');
+const $saveRequiredImage = document.querySelector('p#save-required-image');
+if (!$saveRequiredImage) throw new Error('$saveRequiredImage missing');
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -47,7 +52,7 @@ function swapViews(view) {
   }
 }
 function resetDefaultImage() {
-  $randomImage.src = 'images/placeholder.jpg';
+  $randomImage.src = defaultImage;
 }
 function renderFox(fox) {
   const $li = document.createElement('li');
@@ -91,25 +96,36 @@ $saveAnchor.addEventListener('click', function () {
   $saveDialog.showModal();
 });
 $saveNopeAnchor.addEventListener('click', function () {
+  $saveRequiredText.className = 'hidden';
+  $saveRequiredImage.className = 'hidden';
   $saveForm.reset();
   $saveDialog.close();
 });
 $saveYesAnchor.addEventListener('click', function () {
   const $formElements = $saveForm.elements;
-  const foxData = {
-    title: $formElements.title.value,
-    notes: $formElements.notes.value,
-    photo: $randomImage.src,
-    id: data.nextId,
-  };
-  data.nextId++;
-  data.foxes.unshift(foxData);
-  toggleNoFoxes();
-  resetDefaultImage();
-  $ul.prepend(renderFox(foxData));
-  writeData();
-  $saveForm.reset();
-  $saveDialog.close();
+  if ($randomImage.src.includes(defaultImage)) {
+    $saveRequiredImage.className = 'show';
+  } else if (!$formElements.title.value || !$formElements.notes.value) {
+    $saveRequiredText.className = 'show';
+  } else {
+    const foxData = {
+      title: $formElements.title.value,
+      notes: $formElements.notes.value,
+      photo: $randomImage.src,
+      id: data.nextId,
+    };
+    data.nextId++;
+    data.foxes.unshift(foxData);
+    toggleNoFoxes();
+    resetDefaultImage();
+    $message.textContent = getSaved();
+    $saveRequiredText.className = 'hidden';
+    $saveRequiredImage.className = 'hidden';
+    $ul.prepend(renderFox(foxData));
+    writeData();
+    $saveForm.reset();
+    $saveDialog.close();
+  }
 });
 $foxesAnchor.addEventListener('click', function () {
   swapViews('view-fox');

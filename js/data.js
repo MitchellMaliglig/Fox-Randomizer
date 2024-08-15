@@ -12,6 +12,7 @@ const messages = [
   "We've got a good one right here!",
   'This one makes me happy...',
 ];
+const saved = ['Great choice!', 'Excellent choice!', 'Good taste!'];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function writeData() {
   const json = JSON.stringify(data);
@@ -31,6 +32,10 @@ function readData() {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getMessage() {
   return `"${messages[Math.floor(Math.random() * messages.length)]}"`;
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getSaved() {
+  return `"${saved[Math.floor(Math.random() * saved.length)]}"`;
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function fetchFox() {

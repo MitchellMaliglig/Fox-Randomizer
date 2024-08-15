@@ -32,6 +32,8 @@ const messages = [
   'This one makes me happy...',
 ] as string[];
 
+const saved = ['Great choice!', 'Excellent choice!', 'Good taste!'] as string[];
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function writeData(): void {
   const json = JSON.stringify(data);
@@ -54,6 +56,11 @@ function readData(): Data {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getMessage(): string {
   return `"${messages[Math.floor(Math.random() * messages.length)]}"`;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getSaved(): string {
+  return `"${saved[Math.floor(Math.random() * saved.length)]}"`;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
