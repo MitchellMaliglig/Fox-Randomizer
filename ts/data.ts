@@ -6,8 +6,8 @@ interface Fox {
 
 interface FoxData {
   title: string;
-  photo: string;
   notes: string;
+  photo: string;
   id: number;
 }
 

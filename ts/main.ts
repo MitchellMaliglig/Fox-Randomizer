@@ -1,3 +1,10 @@
+interface FormElements extends HTMLFormControlsCollection {
+  title: HTMLTextAreaElement;
+  notes: HTMLTextAreaElement;
+  // title: ['save-title'];
+  // notes: ['save-notes'];
+}
+
 const $randomImage = document.querySelector('img.random') as HTMLImageElement;
 if (!$randomImage) throw new Error('$randomImage missing');
 
@@ -42,6 +49,14 @@ if (!$generateFoxDiv) throw new Error('$generateFoxDiv missing');
 const $viewFoxDiv = document.querySelector('div[data-view="view-fox"]');
 if (!$viewFoxDiv) throw new Error('$viewFoxDiv missing');
 
+const $ul = document.querySelector('ul') as HTMLUListElement;
+if (!$ul) throw new Error('$ul missing');
+
+const $noFoxesImage = document.querySelector(
+  'img.no-foxes',
+) as HTMLImageElement;
+if (!$noFoxesImage) throw new Error('$noFoxesImages missing');
+
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -60,6 +75,51 @@ function swapViews(view: string): void {
         v.className = 'hidden';
       }
     });
+  }
+}
+
+function resetDefaultImage(): void {
+  $randomImage.src = 'images/placeholder.jpg';
+}
+
+function renderFox(fox: FoxData): HTMLLIElement {
+  const $li = document.createElement('li');
+  $li.setAttribute('data-fox-id', fox.id.toString());
+
+  const $row = document.createElement('div');
+  $row.setAttribute('class', 'row');
+
+  const $imageHalf = document.createElement('div');
+  $imageHalf.setAttribute('class', 'column-half');
+
+  const $img = document.createElement('img');
+  $img.src = fox.photo;
+
+  const $textHalf = document.createElement('div');
+  $textHalf.setAttribute('class', 'column-half');
+
+  const $h3 = document.createElement('h3');
+  $h3.textContent = fox.title;
+
+  const $pencilIcon = document.createElement('i');
+  $pencilIcon.setAttribute('class', 'fa-solid fa-pencil');
+
+  const $p = document.createElement('p');
+  $p.textContent = fox.notes;
+
+  $li.append($row);
+  $imageHalf.append($img);
+  $h3.append($pencilIcon);
+  $textHalf.append($h3, $p);
+  $row.append($imageHalf, $textHalf);
+  return $li;
+}
+
+function toggleNoFoxes(): void {
+  if (data.foxes.length > 0) {
+    $noFoxesImage.className = 'no-foxes hidden';
+  } else {
+    $noFoxesImage.className = 'no-foxes show';
   }
 }
 
@@ -82,6 +142,24 @@ $saveNopeAnchor.addEventListener('click', function () {
 });
 
 $saveYesAnchor.addEventListener('click', function () {
+  const $formElements = $saveForm.elements as FormElements;
+
+  const foxData: FoxData = {
+    title: $formElements.title.value,
+    notes: $formElements.notes.value,
+    photo: $randomImage.src,
+    id: data.nextId,
+  };
+
+  data.nextId++;
+  data.foxes.unshift(foxData);
+
+  toggleNoFoxes();
+  resetDefaultImage();
+  $ul.prepend(renderFox(foxData));
+
+  writeData();
+
   $saveForm.reset();
   $saveDialog.close();
 });
@@ -92,4 +170,12 @@ $foxesAnchor.addEventListener('click', function () {
 
 $newAnchor.addEventListener('click', function () {
   swapViews('generate-fox');
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  data.foxes.forEach(function (fox) {
+    $ul.append(renderFox(fox));
+  });
+
+  toggleNoFoxes();
 });

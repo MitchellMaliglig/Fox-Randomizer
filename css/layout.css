@@ -54,6 +54,12 @@ img {
   width: 75%;
 }
 
+img.no-foxes {
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+}
+
 textarea {
   width: 100%;
 }
