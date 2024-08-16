@@ -80,3 +80,13 @@ async function fetchFox(): Promise<string | null> {
 
   return null;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getFox(id: number): FoxData | null {
+  for (let i: number = 0; i < data.foxes.length; i++) {
+    if (data.foxes[i].id === id) {
+      return data.foxes[i];
+    }
+  }
+  return null;
+}

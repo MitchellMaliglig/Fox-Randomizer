@@ -51,3 +51,12 @@ async function fetchFox() {
   }
   return null;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getFox(id) {
+  for (let i = 0; i < data.foxes.length; i++) {
+    if (data.foxes[i].id === id) {
+      return data.foxes[i];
+    }
+  }
+  return null;
+}

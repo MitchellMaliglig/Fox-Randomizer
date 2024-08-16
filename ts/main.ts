@@ -78,6 +78,19 @@ const $saveRequiredImage = document.querySelector(
 ) as HTMLParagraphElement;
 if (!$saveRequiredImage) throw new Error('$saveRequiredImage missing');
 
+const $editImage = document.querySelector('img.edit') as HTMLImageElement;
+if (!$editImage) throw new Error('$editImage missing');
+
+const $editTitle = document.querySelector(
+  'textarea#edit-title',
+) as HTMLTextAreaElement;
+if (!$editTitle) throw new Error('$editTitle missing');
+
+const $editNotes = document.querySelector(
+  'textarea#edit-notes',
+) as HTMLTextAreaElement;
+if (!$editNotes) throw new Error('$editNotes missing');
+
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -211,4 +224,20 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   toggleNoFoxes();
+});
+
+$ul.addEventListener('click', function (event: Event) {
+  const $eventTarget = event.target as HTMLElement;
+
+  if ($eventTarget.tagName === 'I') {
+    swapViews('edit-fox');
+
+    const $li = $eventTarget.closest('li') as HTMLLIElement;
+    const id = Number($li.getAttribute('data-fox-id'));
+    const fox = getFox(id) as FoxData;
+
+    $editImage.src = fox.photo;
+    $editTitle.textContent = fox.title;
+    $editNotes.textContent = fox.notes;
+  }
 });
