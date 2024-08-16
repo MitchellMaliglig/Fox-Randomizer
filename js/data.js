@@ -25,6 +25,7 @@ function readData() {
   } else {
     return {
       foxes: [],
+      editingId: -1,
       nextId: 1,
     };
   }
@@ -59,4 +60,12 @@ function getFox(id) {
     }
   }
   return null;
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function replaceFox(fox) {
+  for (let i = 0; i < data.foxes.length; i++) {
+    if (fox.id === data.foxes[i].id) {
+      data.foxes[i] = fox;
+    }
+  }
 }

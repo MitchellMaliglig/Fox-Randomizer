@@ -37,6 +37,11 @@ if (!$foxesAnchor) throw new Error('$foxesAnchor missing');
 const $newAnchor = document.querySelector('a.new') as HTMLAnchorElement;
 if (!$newAnchor) throw new Error('$newAnchor missing');
 
+const $saveEditAnchor = document.querySelector(
+  'a.save-edit',
+) as HTMLAnchorElement;
+if (!$saveEditAnchor) throw new Error('$saveEditAnchor missing');
+
 const $saveDialog = document.querySelector(
   'dialog.save-dialog',
 ) as HTMLDialogElement;
@@ -91,6 +96,9 @@ const $editNotes = document.querySelector(
 ) as HTMLTextAreaElement;
 if (!$editNotes) throw new Error('$editNotes missing');
 
+const $editForm = document.querySelector('form.edit-form') as HTMLFormElement;
+if (!$editForm) throw new Error('$editForm missing');
+
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -111,6 +119,7 @@ function swapViews(view: string): void {
       }
     });
   }
+  data.editingId = -1;
 }
 
 function resetDefaultImage(): void {
@@ -233,11 +242,32 @@ $ul.addEventListener('click', function (event: Event) {
     swapViews('edit-fox');
 
     const $li = $eventTarget.closest('li') as HTMLLIElement;
-    const id = Number($li.getAttribute('data-fox-id'));
-    const fox = getFox(id) as FoxData;
+    data.editingId = Number($li.getAttribute('data-fox-id'));
+    const fox = getFox(data.editingId) as FoxData;
 
     $editImage.src = fox.photo;
-    $editTitle.textContent = fox.title;
-    $editNotes.textContent = fox.notes;
+    $editTitle.value = fox.title;
+    $editNotes.value = fox.notes;
   }
+});
+
+$saveEditAnchor.addEventListener('click', function () {
+  const fox = {
+    title: $editTitle.value,
+    notes: $editNotes.value,
+    photo: $editImage.src,
+    id: data.editingId,
+  } as FoxData;
+  replaceFox(fox);
+
+  const $li = document.querySelector(
+    `li[data-fox-id="${data.editingId}"]`,
+  ) as HTMLLIElement;
+
+  $ul.insertBefore(renderFox(fox), $li);
+  $li.remove();
+
+  $editForm.reset();
+  writeData();
+  swapViews('view-fox');
 });

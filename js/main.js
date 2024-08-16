@@ -16,6 +16,8 @@ const $foxesAnchor = document.querySelector('a.foxes');
 if (!$foxesAnchor) throw new Error('$foxesAnchor missing');
 const $newAnchor = document.querySelector('a.new');
 if (!$newAnchor) throw new Error('$newAnchor missing');
+const $saveEditAnchor = document.querySelector('a.save-edit');
+if (!$saveEditAnchor) throw new Error('$saveEditAnchor missing');
 const $saveDialog = document.querySelector('dialog.save-dialog');
 if (!$saveDialog) throw new Error('$saveDialog missing');
 const $saveForm = document.querySelector('form.save-form');
@@ -40,6 +42,8 @@ const $editTitle = document.querySelector('textarea#edit-title');
 if (!$editTitle) throw new Error('$editTitle missing');
 const $editNotes = document.querySelector('textarea#edit-notes');
 if (!$editNotes) throw new Error('$editNotes missing');
+const $editForm = document.querySelector('form.edit-form');
+if (!$editForm) throw new Error('$editForm missing');
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -59,6 +63,7 @@ function swapViews(view) {
       }
     });
   }
+  data.editingId = -1;
 }
 function resetDefaultImage() {
   $randomImage.src = defaultImage;
@@ -149,14 +154,29 @@ document.addEventListener('DOMContentLoaded', function () {
   toggleNoFoxes();
 });
 $ul.addEventListener('click', function (event) {
-  let $eventTarget = event.target;
+  const $eventTarget = event.target;
   if ($eventTarget.tagName === 'I') {
     swapViews('edit-fox');
-    let $li = $eventTarget.closest('li');
-    const id = Number($li.getAttribute('data-fox-id'));
-    let fox = getFox(id);
+    const $li = $eventTarget.closest('li');
+    data.editingId = Number($li.getAttribute('data-fox-id'));
+    let fox = getFox(data.editingId);
     $editImage.src = fox.photo;
-    $editTitle.textContent = fox.title;
-    $editNotes.textContent = fox.notes;
+    $editTitle.value = fox.title;
+    $editNotes.value = fox.notes;
   }
+});
+$saveEditAnchor.addEventListener('click', function () {
+  let fox = {
+    title: $editTitle.value,
+    notes: $editNotes.value,
+    photo: $editImage.src,
+    id: data.editingId,
+  };
+  replaceFox(fox);
+  const $li = document.querySelector(`li[data-fox-id="${data.editingId}"]`);
+  $ul.insertBefore(renderFox(fox), $li);
+  $li.remove();
+  $editForm.reset();
+  writeData();
+  swapViews('view-fox');
 });
