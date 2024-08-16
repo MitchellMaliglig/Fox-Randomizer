@@ -44,6 +44,8 @@ const $editNotes = document.querySelector('textarea#edit-notes');
 if (!$editNotes) throw new Error('$editNotes missing');
 const $editForm = document.querySelector('form.edit-form');
 if (!$editForm) throw new Error('$editForm missing');
+const $editRequired = document.querySelector('#edit-required-text');
+if (!$editRequired) throw new Error('$editRequired missing');
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -155,28 +157,33 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 $ul.addEventListener('click', function (event) {
   const $eventTarget = event.target;
+  $editRequired.className = 'hidden';
   if ($eventTarget.tagName === 'I') {
     swapViews('edit-fox');
     const $li = $eventTarget.closest('li');
     data.editingId = Number($li.getAttribute('data-fox-id'));
-    let fox = getFox(data.editingId);
+    const fox = getFox(data.editingId);
     $editImage.src = fox.photo;
     $editTitle.value = fox.title;
     $editNotes.value = fox.notes;
   }
 });
 $saveEditAnchor.addEventListener('click', function () {
-  let fox = {
-    title: $editTitle.value,
-    notes: $editNotes.value,
-    photo: $editImage.src,
-    id: data.editingId,
-  };
-  replaceFox(fox);
-  const $li = document.querySelector(`li[data-fox-id="${data.editingId}"]`);
-  $ul.insertBefore(renderFox(fox), $li);
-  $li.remove();
-  $editForm.reset();
-  writeData();
-  swapViews('view-fox');
+  if (!$editTitle.value || !$editNotes.value) {
+    $editRequired.className = 'show';
+  } else {
+    const fox = {
+      title: $editTitle.value,
+      notes: $editNotes.value,
+      photo: $editImage.src,
+      id: data.editingId,
+    };
+    replaceFox(fox);
+    const $li = document.querySelector(`li[data-fox-id="${data.editingId}"]`);
+    $ul.insertBefore(renderFox(fox), $li);
+    $li.remove();
+    $editForm.reset();
+    writeData();
+    swapViews('view-fox');
+  }
 });

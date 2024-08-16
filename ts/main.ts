@@ -99,6 +99,11 @@ if (!$editNotes) throw new Error('$editNotes missing');
 const $editForm = document.querySelector('form.edit-form') as HTMLFormElement;
 if (!$editForm) throw new Error('$editForm missing');
 
+const $editRequired = document.querySelector(
+  '#edit-required-text',
+) as HTMLParagraphElement;
+if (!$editRequired) throw new Error('$editRequired missing');
+
 const dataViews = {
   map: new Map(
     Object.entries({
@@ -237,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 $ul.addEventListener('click', function (event: Event) {
   const $eventTarget = event.target as HTMLElement;
+  $editRequired.className = 'hidden';
 
   if ($eventTarget.tagName === 'I') {
     swapViews('edit-fox');
@@ -252,22 +258,26 @@ $ul.addEventListener('click', function (event: Event) {
 });
 
 $saveEditAnchor.addEventListener('click', function () {
-  const fox = {
-    title: $editTitle.value,
-    notes: $editNotes.value,
-    photo: $editImage.src,
-    id: data.editingId,
-  } as FoxData;
-  replaceFox(fox);
+  if (!$editTitle.value || !$editNotes.value) {
+    $editRequired.className = 'show';
+  } else {
+    const fox = {
+      title: $editTitle.value,
+      notes: $editNotes.value,
+      photo: $editImage.src,
+      id: data.editingId,
+    } as FoxData;
+    replaceFox(fox);
 
-  const $li = document.querySelector(
-    `li[data-fox-id="${data.editingId}"]`,
-  ) as HTMLLIElement;
+    const $li = document.querySelector(
+      `li[data-fox-id="${data.editingId}"]`,
+    ) as HTMLLIElement;
 
-  $ul.insertBefore(renderFox(fox), $li);
-  $li.remove();
+    $ul.insertBefore(renderFox(fox), $li);
+    $li.remove();
 
-  $editForm.reset();
-  writeData();
-  swapViews('view-fox');
+    $editForm.reset();
+    writeData();
+    swapViews('view-fox');
+  }
 });
