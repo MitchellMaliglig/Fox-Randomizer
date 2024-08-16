@@ -24,6 +24,8 @@ const $generateFoxDiv = document.querySelector('div[data-view="generate-fox"]');
 if (!$generateFoxDiv) throw new Error('$generateFoxDiv missing');
 const $viewFoxDiv = document.querySelector('div[data-view="view-fox"]');
 if (!$viewFoxDiv) throw new Error('$viewFoxDiv missing');
+const $editFoxDiv = document.querySelector('div[data-view="edit-fox"');
+if (!$editFoxDiv) throw new Error('$editFoxDiv missing');
 const $ul = document.querySelector('ul');
 if (!$ul) throw new Error('$ul missing');
 const $noFoxesImage = document.querySelector('img.no-foxes');
@@ -37,6 +39,7 @@ const dataViews = {
     Object.entries({
       'generate-fox': $generateFoxDiv,
       'view-fox': $viewFoxDiv,
+      'edit-fox': $editFoxDiv,
     }),
   ),
 };

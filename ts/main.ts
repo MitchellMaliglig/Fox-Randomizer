@@ -45,11 +45,20 @@ if (!$saveDialog) throw new Error('$saveDialog missing');
 const $saveForm = document.querySelector('form.save-form') as HTMLFormElement;
 if (!$saveForm) throw new Error('$saveForm missing');
 
-const $generateFoxDiv = document.querySelector('div[data-view="generate-fox"]');
+const $generateFoxDiv = document.querySelector(
+  'div[data-view="generate-fox"]',
+) as HTMLDivElement;
 if (!$generateFoxDiv) throw new Error('$generateFoxDiv missing');
 
-const $viewFoxDiv = document.querySelector('div[data-view="view-fox"]');
+const $viewFoxDiv = document.querySelector(
+  'div[data-view="view-fox"]',
+) as HTMLDivElement;
 if (!$viewFoxDiv) throw new Error('$viewFoxDiv missing');
+
+const $editFoxDiv = document.querySelector(
+  'div[data-view="edit-fox"',
+) as HTMLDivElement;
+if (!$editFoxDiv) throw new Error('$editFoxDiv missing');
 
 const $ul = document.querySelector('ul') as HTMLUListElement;
 if (!$ul) throw new Error('$ul missing');
@@ -74,6 +83,7 @@ const dataViews = {
     Object.entries({
       'generate-fox': $generateFoxDiv,
       'view-fox': $viewFoxDiv,
+      'edit-fox': $editFoxDiv,
     }),
   ) as Map<string, HTMLDivElement>,
 };

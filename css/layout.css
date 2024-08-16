@@ -71,10 +71,19 @@ a.save-yes {
 }
 
 a.new,
+a.save-edit,
 i {
   float: right;
 }
 
 h2.entries {
   display: inline;
+}
+
+.justify-content-space-between {
+  justify-content: space-between;
+}
+
+textarea#edit-title {
+  margin-bottom: 1rem;
 }

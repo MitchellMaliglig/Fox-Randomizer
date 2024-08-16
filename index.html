@@ -27,7 +27,7 @@
       </div>
     </header>
     <main class="container">
-      <div data-view="generate-fox" class="show">
+      <div data-view="generate-fox" class="hidden">
         <div class="row">
           <div class="column-half">
             <img src="images/Cattius.png" />
@@ -99,6 +99,28 @@
         </div>
         <img src="images/no-foxes.jpg" class="no-foxes show" />
         <ul></ul>
+      </div>
+      <div data-view="edit-fox" class="show">
+        <div class="column-full">
+          <h2>Edit Fox</h2>
+        </div>
+        <form class="edit-form">
+          <div class="row">
+            <div class="column-half">
+              <img src="/images/placeholder.jpg" />
+            </div>
+            <div class="column-half">
+              <label for="edit-title">Title</label>
+              <textarea id="edit-title" name="title" required></textarea>
+              <label for="edit-notes">Notes</label>
+              <textarea id="edit-notes" name="notes" required></textarea>
+            </div>
+          </div>
+          <div class="row justify-content-space-between">
+            <a class="delete-fox">Delete Fox</a>
+            <a class="save-edit">Save</a>
+          </div>
+        </form>
       </div>
     </main>
     <script src="js/data.js"></script>
