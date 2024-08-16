@@ -54,6 +54,27 @@ img {
   width: 75%;
 }
 
+img.no-foxes {
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+}
+
 textarea {
   width: 100%;
+}
+
+a.save-nope,
+a.save-yes {
+  display: block;
+  text-align: center;
+}
+
+a.new,
+i {
+  float: right;
+}
+
+h2.entries {
+  display: inline;
 }

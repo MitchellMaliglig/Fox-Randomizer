@@ -4,6 +4,22 @@ interface Fox {
   link: string;
 }
 
+interface FoxData {
+  title: string;
+  notes: string;
+  photo: string;
+  id: number;
+}
+
+interface Data {
+  foxes: FoxData[];
+  nextId: number;
+}
+
+const foxKey = 'fox-key';
+
+const data: Data = readData();
+
 const messages = [
   'Cute!',
   'Adorable!',
@@ -16,10 +32,38 @@ const messages = [
   'This one makes me happy...',
 ] as string[];
 
+const saved = ['Great choice!', 'Excellent choice!', 'Good taste!'] as string[];
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function writeData(): void {
+  const json = JSON.stringify(data);
+  localStorage.setItem(foxKey, json);
+}
+
+function readData(): Data {
+  const json = localStorage.getItem(foxKey);
+
+  if (json !== null) {
+    return JSON.parse(json);
+  } else {
+    return {
+      foxes: [] as FoxData[],
+      nextId: 1,
+    };
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getMessage(): string {
   return `"${messages[Math.floor(Math.random() * messages.length)]}"`;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getSaved(): string {
+  return `"${saved[Math.floor(Math.random() * saved.length)]}"`;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function fetchFox(): Promise<string | null> {
   try {
     const response = await fetch('https://randomfox.ca/floof/');
@@ -35,15 +79,4 @@ async function fetchFox(): Promise<string | null> {
   }
 
   return null;
-}
-
-/*
-    19:10  error  'getMessage' is defined but never used  @typescript-eslint/no-unused-vars
-    23:16  error  'fetchFox' is defined but never used    @typescript-eslint/no-unused-vars
-*/
-const dataFalse: boolean = false;
-if (dataFalse) {
-  console.log("We shouldn't be here...");
-  getMessage();
-  fetchFox();
 }
