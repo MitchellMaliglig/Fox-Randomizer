@@ -10,12 +10,19 @@ a.save-yes {
   background: green;
 }
 
+a.delete-fox {
+  background: none;
+  text-decoration: underline;
+  text-decoration-thickness: 0.1rem;
+}
+
 h1,
 a {
   color: white;
 }
 
-p[id*='required'] {
+p[id*='required'],
+a.delete-fox {
   color: red;
 }
 
@@ -56,7 +63,8 @@ a.generate,
 a.save,
 a.save-nope,
 a.save-yes,
-a.new {
+a.new,
+a.save-edit {
   border-radius: 0.5rem;
 }
 

@@ -13,6 +13,7 @@ interface FoxData {
 
 interface Data {
   foxes: FoxData[];
+  editingId: number;
   nextId: number;
 }
 
@@ -48,6 +49,7 @@ function readData(): Data {
   } else {
     return {
       foxes: [] as FoxData[],
+      editingId: -1,
       nextId: 1,
     };
   }
@@ -79,4 +81,23 @@ async function fetchFox(): Promise<string | null> {
   }
 
   return null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getFox(id: number): FoxData | null {
+  for (let i: number = 0; i < data.foxes.length; i++) {
+    if (data.foxes[i].id === id) {
+      return data.foxes[i];
+    }
+  }
+  return null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function replaceFox(fox: FoxData): void {
+  for (let i: number = 0; i < data.foxes.length; i++) {
+    if (fox.id === data.foxes[i].id) {
+      data.foxes[i] = fox;
+    }
+  }
 }

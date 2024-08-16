@@ -25,6 +25,7 @@ function readData() {
   } else {
     return {
       foxes: [],
+      editingId: -1,
       nextId: 1,
     };
   }
@@ -50,4 +51,21 @@ async function fetchFox() {
     console.error('Error:', error);
   }
   return null;
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getFox(id) {
+  for (let i = 0; i < data.foxes.length; i++) {
+    if (data.foxes[i].id === id) {
+      return data.foxes[i];
+    }
+  }
+  return null;
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function replaceFox(fox) {
+  for (let i = 0; i < data.foxes.length; i++) {
+    if (fox.id === data.foxes[i].id) {
+      data.foxes[i] = fox;
+    }
+  }
 }
