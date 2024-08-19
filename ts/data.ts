@@ -96,8 +96,17 @@ function getFox(id: number): FoxData | null {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function replaceFox(fox: FoxData): void {
   for (let i: number = 0; i < data.foxes.length; i++) {
-    if (fox.id === data.foxes[i].id) {
+    if (data.foxes[i].id === fox.id) {
       data.foxes[i] = fox;
+    }
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function removeFox(id: number): void {
+  for (let i: number = 0; i < data.foxes.length; i++) {
+    if (data.foxes[i].id === id) {
+      data.foxes.splice(i, 1);
     }
   }
 }

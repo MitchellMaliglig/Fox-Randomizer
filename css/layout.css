@@ -64,10 +64,10 @@ textarea {
   width: 100%;
 }
 
-a.save-nope,
-a.save-yes {
+a.modal-options {
   display: block;
   text-align: center;
+  width: 5rem;
 }
 
 a.new,

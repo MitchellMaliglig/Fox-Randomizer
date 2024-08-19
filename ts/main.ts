@@ -1,8 +1,6 @@
 interface FormElements extends HTMLFormControlsCollection {
   title: HTMLTextAreaElement;
   notes: HTMLTextAreaElement;
-  // title: ['save-title'];
-  // notes: ['save-notes'];
 }
 
 const defaultImage = 'images/placeholder.jpg';
@@ -11,41 +9,61 @@ const $randomImage = document.querySelector('img.random') as HTMLImageElement;
 if (!$randomImage) throw new Error('$randomImage missing');
 
 const $generateAnchor = document.querySelector(
-  'a.generate',
+  'a#generate',
 ) as HTMLAnchorElement;
 if (!$generateAnchor) throw new Error('$generateAnchor missing');
 
-const $saveAnchor = document.querySelector('a.save') as HTMLAnchorElement;
+const $saveAnchor = document.querySelector('a#save') as HTMLAnchorElement;
 if (!$saveAnchor) throw new Error('$saveAnchor missing');
 
 const $message = document.querySelector('p.message') as HTMLParagraphElement;
 if (!$message) throw new Error('$message missing');
 
 const $saveNopeAnchor = document.querySelector(
-  'a.save-nope',
+  'a#save-nope',
 ) as HTMLAnchorElement;
 if (!$saveNopeAnchor) throw new Error('$saveNopeAnchor missing');
 
 const $saveYesAnchor = document.querySelector(
-  'a.save-yes',
+  'a#save-yes',
 ) as HTMLAnchorElement;
 if (!$saveYesAnchor) throw new Error('$saveYesAnchor');
 
 const $foxesAnchor = document.querySelector('a.foxes') as HTMLAnchorElement;
 if (!$foxesAnchor) throw new Error('$foxesAnchor missing');
 
-const $newAnchor = document.querySelector('a.new') as HTMLAnchorElement;
+const $newAnchor = document.querySelector('a#new') as HTMLAnchorElement;
 if (!$newAnchor) throw new Error('$newAnchor missing');
 
 const $saveEditAnchor = document.querySelector(
-  'a.save-edit',
+  'a#save-edit',
 ) as HTMLAnchorElement;
 if (!$saveEditAnchor) throw new Error('$saveEditAnchor missing');
+
+const $deleteAnchor = document.querySelector(
+  'a#delete-fox',
+) as HTMLAnchorElement;
+if (!$deleteAnchor) throw new Error('$deleteAnchor missing');
+
+const $deleteNopeAnchor = document.querySelector(
+  'a#delete-nope',
+) as HTMLAnchorElement;
+if (!$deleteNopeAnchor) throw new Error('$deleteNopeAnchor missing');
+
+const $deleteYesAnchor = document.querySelector(
+  'a#delete-yes',
+) as HTMLAnchorElement;
+if (!$deleteYesAnchor) throw new Error('$deleteYesAnchor missing');
 
 const $saveDialog = document.querySelector(
   'dialog.save-dialog',
 ) as HTMLDialogElement;
 if (!$saveDialog) throw new Error('$saveDialog missing');
+
+const $deleteDialog = document.querySelector(
+  'dialog.delete-dialog',
+) as HTMLDialogElement;
+if (!$deleteDialog) throw new Error('$deleteDialog missing');
 
 const $saveForm = document.querySelector('form.save-form') as HTMLFormElement;
 if (!$saveForm) throw new Error('$saveForm missing');
@@ -85,16 +103,6 @@ if (!$saveRequiredImage) throw new Error('$saveRequiredImage missing');
 
 const $editImage = document.querySelector('img.edit') as HTMLImageElement;
 if (!$editImage) throw new Error('$editImage missing');
-
-const $editTitle = document.querySelector(
-  'textarea#edit-title',
-) as HTMLTextAreaElement;
-if (!$editTitle) throw new Error('$editTitle missing');
-
-const $editNotes = document.querySelector(
-  'textarea#edit-notes',
-) as HTMLTextAreaElement;
-if (!$editNotes) throw new Error('$editNotes missing');
 
 const $editForm = document.querySelector('form.edit-form') as HTMLFormElement;
 if (!$editForm) throw new Error('$editForm missing');
@@ -242,6 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 $ul.addEventListener('click', function (event: Event) {
   const $eventTarget = event.target as HTMLElement;
+  const $formElements = $editForm.elements as FormElements;
   $editRequired.className = 'hidden';
 
   if ($eventTarget.tagName === 'I') {
@@ -252,18 +261,20 @@ $ul.addEventListener('click', function (event: Event) {
     const fox = getFox(data.editingId) as FoxData;
 
     $editImage.src = fox.photo;
-    $editTitle.value = fox.title;
-    $editNotes.value = fox.notes;
+    $formElements.title.value = fox.title;
+    $formElements.notes.value = fox.notes;
   }
 });
 
 $saveEditAnchor.addEventListener('click', function () {
-  if (!$editTitle.value || !$editNotes.value) {
+  const $formElements = $editForm.elements as FormElements;
+
+  if (!$formElements.title.value || !$formElements.notes.value) {
     $editRequired.className = 'show';
   } else {
     const fox = {
-      title: $editTitle.value,
-      notes: $editNotes.value,
+      title: $formElements.title.value,
+      notes: $formElements.notes.value,
       photo: $editImage.src,
       id: data.editingId,
     } as FoxData;
@@ -280,4 +291,26 @@ $saveEditAnchor.addEventListener('click', function () {
     writeData();
     swapViews('view-fox');
   }
+});
+
+$deleteAnchor.addEventListener('click', function () {
+  $deleteDialog.showModal();
+});
+
+$deleteNopeAnchor.addEventListener('click', function () {
+  $deleteDialog.close();
+});
+
+$deleteYesAnchor.addEventListener('click', function () {
+  removeFox(data.editingId);
+
+  const $li = document.querySelector(
+    `li[data-fox-id="${data.editingId}"]`,
+  ) as HTMLLIElement;
+  $li.remove();
+
+  writeData();
+  toggleNoFoxes();
+  swapViews('view-fox');
+  $deleteDialog.close();
 });
