@@ -2,24 +2,32 @@
 const defaultImage = 'images/placeholder.jpg';
 const $randomImage = document.querySelector('img.random');
 if (!$randomImage) throw new Error('$randomImage missing');
-const $generateAnchor = document.querySelector('a.generate');
+const $generateAnchor = document.querySelector('a#generate');
 if (!$generateAnchor) throw new Error('$generateAnchor missing');
-const $saveAnchor = document.querySelector('a.save');
+const $saveAnchor = document.querySelector('a#save');
 if (!$saveAnchor) throw new Error('$saveAnchor missing');
 const $message = document.querySelector('p.message');
 if (!$message) throw new Error('$message missing');
-const $saveNopeAnchor = document.querySelector('a.save-nope');
+const $saveNopeAnchor = document.querySelector('a#save-nope');
 if (!$saveNopeAnchor) throw new Error('$saveNopeAnchor missing');
-const $saveYesAnchor = document.querySelector('a.save-yes');
+const $saveYesAnchor = document.querySelector('a#save-yes');
 if (!$saveYesAnchor) throw new Error('$saveYesAnchor');
 const $foxesAnchor = document.querySelector('a.foxes');
 if (!$foxesAnchor) throw new Error('$foxesAnchor missing');
-const $newAnchor = document.querySelector('a.new');
+const $newAnchor = document.querySelector('a#new');
 if (!$newAnchor) throw new Error('$newAnchor missing');
-const $saveEditAnchor = document.querySelector('a.save-edit');
+const $saveEditAnchor = document.querySelector('a#save-edit');
 if (!$saveEditAnchor) throw new Error('$saveEditAnchor missing');
+const $deleteAnchor = document.querySelector('a#delete-fox');
+if (!$deleteAnchor) throw new Error('$deleteAnchor missing');
+const $deleteNopeAnchor = document.querySelector('a#delete-nope');
+if (!$deleteNopeAnchor) throw new Error('$deleteNopeAnchor missing');
+const $deleteYesAnchor = document.querySelector('a#delete-yes');
+if (!$deleteYesAnchor) throw new Error('$deleteYesAnchor missing');
 const $saveDialog = document.querySelector('dialog.save-dialog');
 if (!$saveDialog) throw new Error('$saveDialog missing');
+const $deleteDialog = document.querySelector('dialog.delete-dialog');
+if (!$deleteDialog) throw new Error('$deleteDialog missing');
 const $saveForm = document.querySelector('form.save-form');
 if (!$saveForm) throw new Error('$saveForm missing');
 const $generateFoxDiv = document.querySelector('div[data-view="generate-fox"]');
@@ -38,10 +46,6 @@ const $saveRequiredImage = document.querySelector('p#save-required-image');
 if (!$saveRequiredImage) throw new Error('$saveRequiredImage missing');
 const $editImage = document.querySelector('img.edit');
 if (!$editImage) throw new Error('$editImage missing');
-const $editTitle = document.querySelector('textarea#edit-title');
-if (!$editTitle) throw new Error('$editTitle missing');
-const $editNotes = document.querySelector('textarea#edit-notes');
-if (!$editNotes) throw new Error('$editNotes missing');
 const $editForm = document.querySelector('form.edit-form');
 if (!$editForm) throw new Error('$editForm missing');
 const $editRequired = document.querySelector('#edit-required-text');
@@ -157,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 $ul.addEventListener('click', function (event) {
   const $eventTarget = event.target;
+  const $formElements = $editForm.elements;
   $editRequired.className = 'hidden';
   if ($eventTarget.tagName === 'I') {
     swapViews('edit-fox');
@@ -164,17 +169,18 @@ $ul.addEventListener('click', function (event) {
     data.editingId = Number($li.getAttribute('data-fox-id'));
     const fox = getFox(data.editingId);
     $editImage.src = fox.photo;
-    $editTitle.value = fox.title;
-    $editNotes.value = fox.notes;
+    $formElements.title.value = fox.title;
+    $formElements.notes.value = fox.notes;
   }
 });
 $saveEditAnchor.addEventListener('click', function () {
-  if (!$editTitle.value || !$editNotes.value) {
+  const $formElements = $editForm.elements;
+  if (!$formElements.title.value || !$formElements.notes.value) {
     $editRequired.className = 'show';
   } else {
     const fox = {
-      title: $editTitle.value,
-      notes: $editNotes.value,
+      title: $formElements.title.value,
+      notes: $formElements.notes.value,
       photo: $editImage.src,
       id: data.editingId,
     };
@@ -186,4 +192,19 @@ $saveEditAnchor.addEventListener('click', function () {
     writeData();
     swapViews('view-fox');
   }
+});
+$deleteAnchor.addEventListener('click', function () {
+  $deleteDialog.showModal();
+});
+$deleteNopeAnchor.addEventListener('click', function () {
+  $deleteDialog.close();
+});
+$deleteYesAnchor.addEventListener('click', function () {
+  removeFox(data.editingId);
+  const $li = document.querySelector(`li[data-fox-id="${data.editingId}"]`);
+  $li.remove();
+  writeData();
+  toggleNoFoxes();
+  swapViews('view-fox');
+  $deleteDialog.close();
 });

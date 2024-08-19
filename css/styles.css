@@ -2,15 +2,20 @@ header {
   background-color: rgb(0, 162, 232);
 }
 
-a.save-nope {
+a#save-nope,
+a#delete-nope {
   background: gray;
 }
 
-a.save-yes {
+a#save-yes {
   background: green;
 }
 
-a.delete-fox {
+a#delete-yes {
+  background: red;
+}
+
+a#delete-fox {
   background: none;
   text-decoration: underline;
   text-decoration-thickness: 0.1rem;
@@ -22,7 +27,7 @@ a {
 }
 
 p[id*='required'],
-a.delete-fox {
+a#delete-fox {
   color: red;
 }
 
@@ -47,8 +52,8 @@ a {
   background: rgb(0, 162, 232);
 }
 
-a.generate,
-a.save {
+a#generate,
+a#save {
   margin-bottom: 1.5rem;
   width: 75%;
   display: block;
@@ -59,12 +64,7 @@ i:hover {
   cursor: pointer;
 }
 
-a.generate,
-a.save,
-a.save-nope,
-a.save-yes,
-a.new,
-a.save-edit {
+a.round {
   border-radius: 0.5rem;
 }
 
