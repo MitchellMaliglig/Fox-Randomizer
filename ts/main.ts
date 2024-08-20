@@ -87,7 +87,7 @@ const $ul = document.querySelector('ul') as HTMLUListElement;
 if (!$ul) throw new Error('$ul missing');
 
 const $noFoxesImage = document.querySelector(
-  'img.no-foxes',
+  'img#no-foxes',
 ) as HTMLImageElement;
 if (!$noFoxesImage) throw new Error('$noFoxesImages missing');
 
@@ -139,9 +139,9 @@ function resetDefaultImage(): void {
   $randomImage.src = defaultImage;
 }
 
-function renderFox(fox: FoxData): HTMLLIElement {
+function renderFox(id: number): HTMLLIElement {
   const $li = document.createElement('li');
-  $li.setAttribute('data-fox-id', fox.id.toString());
+  $li.setAttribute('data-fox-id', id.toString());
 
   const $row = document.createElement('div');
   $row.setAttribute('class', 'row');
@@ -150,19 +150,19 @@ function renderFox(fox: FoxData): HTMLLIElement {
   $imageHalf.setAttribute('class', 'column-half');
 
   const $img = document.createElement('img');
-  $img.src = fox.photo;
+  $img.src = data.foxes.get(id)?.photo as string;
 
   const $textHalf = document.createElement('div');
   $textHalf.setAttribute('class', 'column-half');
 
   const $h3 = document.createElement('h3');
-  $h3.textContent = fox.title;
+  $h3.textContent = data.foxes.get(id)?.title as string;
 
   const $pencilIcon = document.createElement('i');
   $pencilIcon.setAttribute('class', 'fa-solid fa-pencil');
 
   const $p = document.createElement('p');
-  $p.textContent = fox.notes;
+  $p.textContent = data.foxes.get(id)?.notes as string;
 
   $li.append($row);
   $imageHalf.append($img);
@@ -173,10 +173,10 @@ function renderFox(fox: FoxData): HTMLLIElement {
 }
 
 function toggleNoFoxes(): void {
-  if (data.foxes.length > 0) {
-    $noFoxesImage.className = 'no-foxes hidden';
+  if (data.foxes.size > 0) {
+    $noFoxesImage.className = 'hidden';
   } else {
-    $noFoxesImage.className = 'no-foxes show';
+    $noFoxesImage.className = 'show';
   }
 }
 
@@ -212,20 +212,18 @@ $saveYesAnchor.addEventListener('click', function () {
       title: $formElements.title.value,
       notes: $formElements.notes.value,
       photo: $randomImage.src,
-      id: data.nextId,
     };
 
+    data.foxes.set(data.nextId, foxData);
+    $ul.prepend(renderFox(data.nextId));
     data.nextId++;
-    data.foxes.unshift(foxData);
+    writeData();
 
     toggleNoFoxes();
     resetDefaultImage();
     $message.textContent = getSaved();
     $saveRequiredText.className = 'hidden';
     $saveRequiredImage.className = 'hidden';
-
-    $ul.prepend(renderFox(foxData));
-    writeData();
 
     $saveForm.reset();
     $saveDialog.close();
@@ -241,9 +239,9 @@ $newAnchor.addEventListener('click', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  data.foxes.forEach(function (fox) {
-    $ul.append(renderFox(fox));
-  });
+  for (const id of Array.from(data.foxes.keys())) {
+    $ul.prepend(renderFox(id));
+  }
 
   toggleNoFoxes();
 });
@@ -258,7 +256,7 @@ $ul.addEventListener('click', function (event: Event) {
 
     const $li = $eventTarget.closest('li') as HTMLLIElement;
     data.editingId = Number($li.getAttribute('data-fox-id'));
-    const fox = getFox(data.editingId) as FoxData;
+    const fox = data.foxes.get(data.editingId) as FoxData;
 
     $editImage.src = fox.photo;
     $formElements.title.value = fox.title;
@@ -276,15 +274,14 @@ $saveEditAnchor.addEventListener('click', function () {
       title: $formElements.title.value,
       notes: $formElements.notes.value,
       photo: $editImage.src,
-      id: data.editingId,
     } as FoxData;
-    replaceFox(fox);
+    data.foxes.set(data.editingId, fox);
 
     const $li = document.querySelector(
       `li[data-fox-id="${data.editingId}"]`,
     ) as HTMLLIElement;
 
-    $ul.insertBefore(renderFox(fox), $li);
+    $ul.insertBefore(renderFox(data.editingId), $li);
     $li.remove();
 
     $editForm.reset();
@@ -302,7 +299,7 @@ $deleteNopeAnchor.addEventListener('click', function () {
 });
 
 $deleteYesAnchor.addEventListener('click', function () {
-  removeFox(data.editingId);
+  data.foxes.delete(data.editingId);
 
   const $li = document.querySelector(
     `li[data-fox-id="${data.editingId}"]`,

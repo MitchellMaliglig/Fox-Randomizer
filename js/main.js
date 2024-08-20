@@ -38,7 +38,7 @@ const $editFoxDiv = document.querySelector('div[data-view="edit-fox"');
 if (!$editFoxDiv) throw new Error('$editFoxDiv missing');
 const $ul = document.querySelector('ul');
 if (!$ul) throw new Error('$ul missing');
-const $noFoxesImage = document.querySelector('img.no-foxes');
+const $noFoxesImage = document.querySelector('img#no-foxes');
 if (!$noFoxesImage) throw new Error('$noFoxesImages missing');
 const $saveRequiredText = document.querySelector('p#save-required-text');
 if (!$saveRequiredText) throw new Error('$saveRequiredText missing');
@@ -74,23 +74,23 @@ function swapViews(view) {
 function resetDefaultImage() {
   $randomImage.src = defaultImage;
 }
-function renderFox(fox) {
+function renderFox(id) {
   const $li = document.createElement('li');
-  $li.setAttribute('data-fox-id', fox.id.toString());
+  $li.setAttribute('data-fox-id', id.toString());
   const $row = document.createElement('div');
   $row.setAttribute('class', 'row');
   const $imageHalf = document.createElement('div');
   $imageHalf.setAttribute('class', 'column-half');
   const $img = document.createElement('img');
-  $img.src = fox.photo;
+  $img.src = data.foxes.get(id)?.photo;
   const $textHalf = document.createElement('div');
   $textHalf.setAttribute('class', 'column-half');
   const $h3 = document.createElement('h3');
-  $h3.textContent = fox.title;
+  $h3.textContent = data.foxes.get(id)?.title;
   const $pencilIcon = document.createElement('i');
   $pencilIcon.setAttribute('class', 'fa-solid fa-pencil');
   const $p = document.createElement('p');
-  $p.textContent = fox.notes;
+  $p.textContent = data.foxes.get(id)?.notes;
   $li.append($row);
   $imageHalf.append($img);
   $h3.append($pencilIcon);
@@ -99,10 +99,10 @@ function renderFox(fox) {
   return $li;
 }
 function toggleNoFoxes() {
-  if (data.foxes.length > 0) {
-    $noFoxesImage.className = 'no-foxes hidden';
+  if (data.foxes.size > 0) {
+    $noFoxesImage.className = 'hidden';
   } else {
-    $noFoxesImage.className = 'no-foxes show';
+    $noFoxesImage.className = 'show';
   }
 }
 $generateAnchor.addEventListener('click', async function () {
@@ -132,17 +132,16 @@ $saveYesAnchor.addEventListener('click', function () {
       title: $formElements.title.value,
       notes: $formElements.notes.value,
       photo: $randomImage.src,
-      id: data.nextId,
     };
+    data.foxes.set(data.nextId, foxData);
+    $ul.prepend(renderFox(data.nextId));
     data.nextId++;
-    data.foxes.unshift(foxData);
+    writeData();
     toggleNoFoxes();
     resetDefaultImage();
     $message.textContent = getSaved();
     $saveRequiredText.className = 'hidden';
     $saveRequiredImage.className = 'hidden';
-    $ul.prepend(renderFox(foxData));
-    writeData();
     $saveForm.reset();
     $saveDialog.close();
   }
@@ -154,9 +153,9 @@ $newAnchor.addEventListener('click', function () {
   swapViews('generate-fox');
 });
 document.addEventListener('DOMContentLoaded', function () {
-  data.foxes.forEach(function (fox) {
-    $ul.append(renderFox(fox));
-  });
+  for (const id of Array.from(data.foxes.keys())) {
+    $ul.prepend(renderFox(id));
+  }
   toggleNoFoxes();
 });
 $ul.addEventListener('click', function (event) {
@@ -167,7 +166,7 @@ $ul.addEventListener('click', function (event) {
     swapViews('edit-fox');
     const $li = $eventTarget.closest('li');
     data.editingId = Number($li.getAttribute('data-fox-id'));
-    const fox = getFox(data.editingId);
+    const fox = data.foxes.get(data.editingId);
     $editImage.src = fox.photo;
     $formElements.title.value = fox.title;
     $formElements.notes.value = fox.notes;
@@ -182,11 +181,10 @@ $saveEditAnchor.addEventListener('click', function () {
       title: $formElements.title.value,
       notes: $formElements.notes.value,
       photo: $editImage.src,
-      id: data.editingId,
     };
-    replaceFox(fox);
+    data.foxes.set(data.editingId, fox);
     const $li = document.querySelector(`li[data-fox-id="${data.editingId}"]`);
-    $ul.insertBefore(renderFox(fox), $li);
+    $ul.insertBefore(renderFox(data.editingId), $li);
     $li.remove();
     $editForm.reset();
     writeData();
@@ -200,7 +198,7 @@ $deleteNopeAnchor.addEventListener('click', function () {
   $deleteDialog.close();
 });
 $deleteYesAnchor.addEventListener('click', function () {
-  removeFox(data.editingId);
+  data.foxes.delete(data.editingId);
   const $li = document.querySelector(`li[data-fox-id="${data.editingId}"]`);
   $li.remove();
   writeData();

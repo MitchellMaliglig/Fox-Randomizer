@@ -59,6 +59,10 @@ a#save {
   display: block;
 }
 
+a#new {
+  height: 75%;
+}
+
 a:hover,
 i:hover {
   cursor: pointer;

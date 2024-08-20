@@ -54,7 +54,7 @@ img {
   width: 75%;
 }
 
-img.no-foxes {
+img#no-foxes {
   width: 50%;
   margin: 0 auto;
   display: flex;
@@ -70,18 +70,16 @@ a.modal-options {
   width: 5rem;
 }
 
-a.new,
-a.save-edit,
 i {
   float: right;
 }
 
-h2.entries {
-  display: inline;
-}
-
 .justify-content-space-between {
   justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
 }
 
 textarea#edit-title {
