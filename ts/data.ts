@@ -8,11 +8,10 @@ interface FoxData {
   title: string;
   notes: string;
   photo: string;
-  id: number;
 }
 
 interface Data {
-  foxes: FoxData[];
+  foxes: Map<number, FoxData>;
   editingId: number;
   nextId: number;
 }
@@ -38,17 +37,24 @@ const saved = ['Great choice!', 'Excellent choice!', 'Good taste!'] as string[];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function writeData(): void {
   const json = JSON.stringify(data);
-  localStorage.setItem(foxKey, json);
+
+  const foxesJson = JSON.stringify(Array.from(data.foxes.entries()));
+  const completeJson = json.replace(`"foxes":{}`, `"foxes":${foxesJson}`);
+
+  localStorage.setItem(foxKey, completeJson);
 }
 
 function readData(): Data {
   const json = localStorage.getItem(foxKey);
 
   if (json !== null) {
-    return JSON.parse(json);
+    const jsonParse = JSON.parse(json);
+    jsonParse.foxes = new Map(jsonParse.foxes);
+
+    return jsonParse;
   } else {
     return {
-      foxes: [] as FoxData[],
+      foxes: new Map<number, FoxData>(),
       editingId: -1,
       nextId: 1,
     };
@@ -81,32 +87,4 @@ async function fetchFox(): Promise<string | null> {
   }
 
   return null;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getFox(id: number): FoxData | null {
-  for (let i: number = 0; i < data.foxes.length; i++) {
-    if (data.foxes[i].id === id) {
-      return data.foxes[i];
-    }
-  }
-  return null;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function replaceFox(fox: FoxData): void {
-  for (let i: number = 0; i < data.foxes.length; i++) {
-    if (data.foxes[i].id === fox.id) {
-      data.foxes[i] = fox;
-    }
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function removeFox(id: number): void {
-  for (let i: number = 0; i < data.foxes.length; i++) {
-    if (data.foxes[i].id === id) {
-      data.foxes.splice(i, 1);
-    }
-  }
 }

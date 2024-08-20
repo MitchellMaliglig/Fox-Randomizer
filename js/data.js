@@ -16,15 +16,19 @@ const saved = ['Great choice!', 'Excellent choice!', 'Good taste!'];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function writeData() {
   const json = JSON.stringify(data);
-  localStorage.setItem(foxKey, json);
+  const foxesJson = JSON.stringify(Array.from(data.foxes.entries()));
+  let completeJson = json.replace(`"foxes":{}`, `"foxes":${foxesJson}`);
+  localStorage.setItem(foxKey, completeJson);
 }
 function readData() {
   const json = localStorage.getItem(foxKey);
   if (json !== null) {
-    return JSON.parse(json);
+    const jsonParse = JSON.parse(json);
+    jsonParse.foxes = new Map(jsonParse.foxes);
+    return jsonParse;
   } else {
     return {
-      foxes: [],
+      foxes: new Map(),
       editingId: -1,
       nextId: 1,
     };
@@ -51,29 +55,4 @@ async function fetchFox() {
     console.error('Error:', error);
   }
   return null;
-}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getFox(id) {
-  for (let i = 0; i < data.foxes.length; i++) {
-    if (data.foxes[i].id === id) {
-      return data.foxes[i];
-    }
-  }
-  return null;
-}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function replaceFox(fox) {
-  for (let i = 0; i < data.foxes.length; i++) {
-    if (data.foxes[i].id === fox.id) {
-      data.foxes[i] = fox;
-    }
-  }
-}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function removeFox(id) {
-  for (let i = 0; i < data.foxes.length; i++) {
-    if (data.foxes[i].id === id) {
-      data.foxes.splice(i, 1);
-    }
-  }
 }
