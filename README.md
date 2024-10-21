@@ -1,6 +1,6 @@
 # Fox Randomizer
 
-Fox Randomizer is an interactive web app designed for fox enjoyers who want to love foxes. Users can randomly generate fox images on the home page as they please, which utilizes the [RandomFox](https://randomfox.ca/floof/) API. Once a user finds a fox image that they like, they can choose to save said image by creating an entry, which requires them to add an appropriate title and description. The user can view their saved entries at any time by click on the "foxes" tab, which will display all the entries that they have created. If the user wishes to modify or delete an entry, they can click on the appropriate pencil icon related to the entry of their choice, then proceed with said action. 
+Fox Randomizer is an interactive web app designed for fox enthusiasts who want to celebrate their love for foxes. Users can randomly generate fox images on the home page using the [RandomFox API](https://randomfox.ca/floof/). Once a user finds a fox image they like, they can save it by creating an entry, which requires adding a suitable title and description. Users can view their saved entries at any time by clicking on the "foxes" tab, which displays all their created entries. To modify or delete an entry, users can click the corresponding pencil icon and proceed with their chosen action.
 
 ## Deployed using GitHub Pages
 Try out the website [here!](https://mitchellmaliglig.github.io/Fox-Randomizer/)
